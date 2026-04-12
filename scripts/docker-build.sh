@@ -23,7 +23,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE="$(cd "$SCRIPT_DIR/.." && pwd)"
 PROJECT_VERSION="${PROJECT_VERSION:-1.3.5-SNAPSHOT}"
-QUANTLIB_VERSION="${QUANTLIB_VERSION:-1.34}"
+QUANTLIB_VERSION="${QUANTLIB_VERSION:-1.41}"
 JAVA_PACKAGE="com.luopc.platform.quantlib"
 
 # Default values
