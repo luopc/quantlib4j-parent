@@ -1,0 +1,43 @@
+# Dockerfile.build - Multi-platform build environment
+# Usage: docker build -f Dockerfile.build --platform linux/amd64 -t quantlib4j-builder .
+
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install all dependencies for QuantLib SWIG
+RUN apt-get update && apt-get install -y \
+    cmake \
+    g++ \
+    make \
+    swig \
+    openjdk-21-jdk \
+    wget \
+    unzip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Build QuantLib from source (using Nexus mirror for reliability)
+ENV QUANTLIB_VERSION=1.41
+ENV QUANTLIB_MIRROR=https://lb.luopc.com/nexus/repository/maven-releases/org/quantlib/QuantLib
+WORKDIR /tmp
+
+RUN wget ${QUANTLIB_MIRROR}/${QUANTLIB_VERSION}/QuantLib-${QUANTLIB_VERSION}.tar.gz && \
+    tar -xzf QuantLib-${QUANTLIB_VERSION}.tar.gz && \
+    cd QuantLib-${QUANTLIB_VERSION} && \
+    ./configure --enable-thread-safe-observer-pattern && \
+    make -j$(nproc) && \
+    make install && \
+    ldconfig && \
+    cd /tmp && \
+    rm -rf QuantLib-${QUANTLIB_VERSION}*
+
+# Set Java environment
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+ENV PATH=$JAVA_HOME/bin:$PATH
+ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+WORKDIR /workspace
+
+# Default command
+CMD ["/bin/bash"]

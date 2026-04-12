@@ -1,0 +1,80 @@
+# .github/workflows/release.yml
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  JAVA_VERSION: '21'
+  QUANTLIB_VERSION: '1.41'
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      - name: Build Docker image
+        run: |
+          docker build -f quantlib4j-native-linux/Dockerfile \
+            -t quantlib4j-builder-linux .
+
+      - name: Build Linux native library
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -v ${{ github.workspace }}/quantlib4j-native-linux:/output \
+            quantlib4j-builder-linux /bin/bash -c "
+              cd /workspace
+              ./scripts/build-swig.sh
+              ./scripts/build-java.sh
+              ./scripts/package-native.sh linux-x64 /path/to/libquantlib4j.so /output
+            "
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x64-native
+          path: quantlib4j-native-linux/target/*.jar
+
+  publish:
+    needs: [build-linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Publish to Maven
+        env:
+          NEXUS_USER: ${{ secrets.NEXUS_USER }}
+          NEXUS_PASS: ${{ secrets.NEXUS_PASS }}
+          NEXUS_URL: ${{ secrets.NEXUS_URL }}
+        run: |
+          # Install main JAR
+          mvn install:install-file \
+            -Dfile=artifacts/quantlib4j-java/quantlib4j-*.jar \
+            -DgroupId=com.luopc.platform.quantlib \
+            -DartifactId=quantlib4j \
+            -Dversion=${{ github.ref_name }} \
+            -Dpackaging=jar
+
+          # Install Linux native JAR
+          mvn install:install-file \
+            -Dfile=artifacts/linux-x64-native/quantlib4j-*-linux-x64.jar \
+            -DgroupId=com.luopc.platform.quantlib \
+            -DartifactId=quantlib4j \
+            -Dversion=${{ github.ref_name }} \
+            -Dpackaging=jar \
+            -Dclassifier=linux-x64
