@@ -160,7 +160,7 @@ if [ "$SKIP_SWIG" != "true" ]; then
     swig -c++ -java \
         -package "$JAVA_PACKAGE" \
         -outdir "$WORKSPACE/quantlib4j-java/src/main/java/com/luopc/platform/quantlib" \
-        -o "$WORKSPACE/quantlib_wrap.cpp" \
+        -o "$SWIG_DIR/SWIG/quantlib_wrap.cpp" \
         quantlib.i
 
     echo "OK: SWIG bindings generated"

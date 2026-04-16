@@ -15,7 +15,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE="$(dirname "$SCRIPT_DIR")"
 
 # QuantLib-SWIG 路径
-QUANTLIB_SWIG="${1:-$WORKSPACE/../../../QuantLib-SWIG}"
+QUANTLIB_SWIG="${1:-$WORKSPACE/../../QuantLib-SWIG}"
 if [ ! -d "$QUANTLIB_SWIG" ]; then
     echo "❌ QuantLib-SWIG not found at: $QUANTLIB_SWIG"
     echo "   Please specify path: $0 /path/to/QuantLib-SWIG"
@@ -144,15 +144,16 @@ echo ""
 
 # 6. 安装到本地 Maven
 echo ">>> Step 6: Install to local Maven repository"
+cd "$JAVA_TARGET"
 mvn install:install-file \
-    -Dfile="quantlib4j-$VERSION.jar" \
+    -Dfile="$JAVA_TARGET/quantlib4j-$VERSION.jar" \
     -DgroupId=com.luopc.platform.quantlib \
     -DartifactId=quantlib4j \
     -Dversion=$VERSION \
     -Dpackaging=jar 2>/dev/null || true
 
 mvn install:install-file \
-    -Dfile="quantlib4j-$VERSION-linux-x64.jar" \
+    -Dfile="$JAVA_TARGET/quantlib4j-$VERSION-linux-x64.jar" \
     -DgroupId=com.luopc.platform.quantlib \
     -DartifactId=quantlib4j \
     -Dversion=$VERSION \
@@ -163,7 +164,7 @@ echo ""
 
 # 清理
 rm -f "$JAVA_TARGET"/sources.txt
-rm -f quantlib_wrap.cpp quantlib_wrap.o
+rm -f "$QUANTLIB_SWIG/SWIG/quantlib_wrap.cpp" "$QUANTLIB_SWIG/SWIG/quantlib_wrap.o"
 
 echo "========================================"
 echo "  Build Complete!"
