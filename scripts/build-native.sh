@@ -12,7 +12,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE="$(cd "$SCRIPT_DIR/.." && pwd)"
 # Go to parent dir where tar.gz files are located
-cd "$WORKSPACE"
+cd "$WORKSPACE/.."
 JAVA_PACKAGE="com.luopc.platform.quantlib"
 PROJECT_VERSION="${PROJECT_VERSION:-1.3.5-SNAPSHOT}"
 QUANTLIB_VERSION="${QUANTLIB_VERSION:-1.42}"
