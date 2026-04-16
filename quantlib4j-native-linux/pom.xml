@@ -17,6 +17,39 @@
     <name>QuantLib4J (Linux x64 Native)</name>
     <description>QuantLib native library for Linux x64</description>
 
+    <profiles>
+        <!-- Ubuntu 24.04 build profile -->
+        <profile>
+            <id>ubuntu24</id>
+            <properties>
+                <distro.classifier>ubuntu24</distro.classifier>
+                <distro.name>Ubuntu 24.04 LTS</distro.name>
+                <distro.version>24.04</distro.version>
+            </properties>
+        </profile>
+        <!-- AlmaLinux 9 build profile -->
+        <profile>
+            <id>alma9</id>
+            <properties>
+                <distro.classifier>alma9</distro.classifier>
+                <distro.name>AlmaLinux 9.7</distro.name>
+                <distro.version>9.7</distro.version>
+            </properties>
+        </profile>
+        <!-- Default (generic linux-x64) -->
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <distro.classifier>linux-x64</distro.classifier>
+                <distro.name>Linux x64</distro.name>
+                <distro.version>unknown</distro.version>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -31,6 +64,8 @@
                         <manifestEntries>
                             <QuantLib-Version>${quantlib.version}</QuantLib-Version>
                             <Platform>linux-x64</Platform>
+                            <Distro>${distro.name}</Distro>
+                            <Distro-Version>${distro.version}</Distro-Version>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -51,9 +86,35 @@
                                 <artifact>
                                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                                     <type>jar</type>
-                                    <classifier>linux-x64</classifier>
+                                    <classifier>${distro.classifier}</classifier>
                                 </artifact>
                             </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Copy platform.properties to JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-platform-info</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/classes/META-INF</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <includes>
+                                        <include>*.properties</include>
+                                    </includes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>

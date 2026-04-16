@@ -1,11 +1,12 @@
 #!/bin/bash
 # build-native.sh - Build QuantLib4J Native Library on Linux
-# Usage: ./build-native.sh [--skip-deps] [--skip-swig] [--skip-build]
+# Usage: ./build-native.sh [--skip-deps] [--skip-swig] [--skip-build] [--distro DISTRO]
 #
 # Options:
 #   --skip-deps   Skip installing dependencies
 #   --skip-swig   Skip SWIG generation
 #   --skip-build  Skip native library compilation
+#   --distro      Force specific distro: ubuntu24, alma9, or auto (default)
 
 set -e
 
@@ -21,6 +22,34 @@ QUANTLIB_VERSION="${QUANTLIB_VERSION:-1.42}"
 SKIP_DEPS=false
 SKIP_SWIG=false
 SKIP_BUILD=false
+DISTRO="auto"
+
+# Detect Linux distribution
+detect_distro() {
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        case "$ID" in
+            ubuntu)
+                if [ "$VERSION_ID" = "24.04" ]; then
+                    echo "ubuntu24"
+                else
+                    echo "ubuntu"
+                fi
+                ;;
+            alma|almalinux)
+                echo "alma9"
+                ;;
+            centos|rhel|rocky)
+                echo "rhel"
+                ;;
+            *)
+                echo "linux-x64"
+                ;;
+        esac
+    else
+        echo "linux-x64"
+    fi
+}
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -28,17 +57,27 @@ while [[ $# -gt 0 ]]; do
         --skip-deps) SKIP_DEPS=true; shift ;;
         --skip-swig) SKIP_SWIG=true; shift ;;
         --skip-build) SKIP_BUILD=true; shift ;;
+        --distro)
+            DISTRO="$2"
+            shift 2
+            ;;
         --help|-h)
             echo "Usage: $0 [OPTIONS]"
             echo "Options:"
             echo "  --skip-deps   Skip installing dependencies"
             echo "  --skip-swig   Skip SWIG generation"
             echo "  --skip-build  Skip native library compilation"
+            echo "  --distro      Force distro: ubuntu24, alma9, auto (default)"
             exit 0
             ;;
         *) echo "Unknown option: $1"; exit 1 ;;
     esac
 done
+
+# Resolve distro
+if [ "$DISTRO" = "auto" ]; then
+    DISTRO=$(detect_distro)
+fi
 
 echo "=============================================="
 echo "  QuantLib4J Native Build (Linux)"
@@ -47,6 +86,7 @@ echo "Workspace:         $WORKSPACE"
 echo "QuantLib Version:  $QUANTLIB_VERSION"
 echo "Java Package:      $JAVA_PACKAGE"
 echo "Project Version:   $PROJECT_VERSION"
+echo "Distro:            $DISTRO ($(detect_distro) detected)"
 echo "=============================================="
 
 # Step 1: Install dependencies
@@ -196,9 +236,9 @@ if [ "$SKIP_BUILD" != "true" ]; then
         $(pkg-config --libs quantlib) \
         -o quantlib4j-native-linux/src/main/resources/libquantlib4j.so
 
-    # Build quantlib4j-native-linux
-    echo "Building quantlib4j-native-linux..."
-    mvn clean install -pl quantlib4j-native-linux -DskipTests
+    # Build quantlib4j-native-linux (with distro profile)
+    echo "Building quantlib4j-native-linux (profile: $DISTRO)..."
+    mvn clean install -pl quantlib4j-native-linux -DskipTests -P$DISTRO
 
     # Build quantlib4j-loader
     echo "Building quantlib4j-loader..."
