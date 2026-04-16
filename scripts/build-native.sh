@@ -88,16 +88,17 @@ if ! command -v swig &> /dev/null || ! swig -version 2>/dev/null | grep -q "4.4"
     echo ""
     echo "[2/5] Building SWIG $SWIG_VERSION..."
 
-    if [ ! -f "swig-$SWIG_VERSION.tar.gz" ]; then
-        wget --no-check-certificate "https://lb.luopc.com/nexus/repository/maven-releases/org/swig/swig/$SWIG_VERSION/swig-$SWIG_VERSION.tar.gz"
+    # Check if already extracted
+    if [ ! -d "swig-$SWIG_VERSION" ]; then
+        tar -xzf swig-$SWIG_VERSION.tar.gz
     fi
 
-    tar -xzf swig-$SWIG_VERSION.tar.gz
     cd swig-$SWIG_VERSION
-    ./configure --without-pcre --without-pcre2
+    mkdir -p build && cd build
+    cmake .. -DCMAKE_BUILD_TYPE=Release
     make -j$(nproc)
     sudo make install
-    cd ..
+    cd ../..
     rm -rf swig-$SWIG_VERSION
 
     export PATH="/usr/local/bin:$PATH"
@@ -112,17 +113,20 @@ if ! pkg-config --exists quantlib 2>/dev/null; then
     echo ""
     echo "[3/5] Building QuantLib $QUANTLIB_VERSION..."
 
-    if [ ! -f "QuantLib-$QUANTLIB_VERSION.tar.gz" ]; then
-        wget --no-check-certificate "https://lb.luopc.com/nexus/repository/maven-releases/org/quantlib/QuantLib/$QUANTLIB_VERSION/QuantLib-$QUANTLIB_VERSION.tar.gz"
+    # Check if already extracted
+    if [ ! -d "QuantLib-$QUANTLIB_VERSION" ]; then
+        tar -xzf QuantLib-$QUANTLIB_VERSION.tar.gz
     fi
 
-    tar -xzf QuantLib-$QUANTLIB_VERSION.tar.gz
     cd QuantLib-$QUANTLIB_VERSION
-    ./configure --enable-thread-safe-observer-pattern
+    mkdir -p build && cd build
+    cmake .. -DCMAKE_BUILD_TYPE=Release \
+        -DQL_ENABLE_THREAD_SAFE_OBSERVER_PATTERN=ON \
+        -DBUILD_SHARED_LIBS=ON
     make -j$(nproc)
     sudo make install
     sudo ldconfig
-    cd ..
+    cd ../..
     rm -rf QuantLib-$QUANTLIB_VERSION
 
     echo "OK: QuantLib installed"
