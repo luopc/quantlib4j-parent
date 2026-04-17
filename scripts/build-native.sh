@@ -115,6 +115,8 @@ if [ "$SKIP_DEPS" != "true" ]; then
             libboost-all-dev \
             libicu-dev \
             libpcre2-dev \
+            bison \
+            flex \
             wget \
             tar \
             gzip

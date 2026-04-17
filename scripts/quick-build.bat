@@ -13,7 +13,7 @@ set "WORKSPACE=%SCRIPT_DIR%.."
 
 REM QuantLib-SWIG path
 if "%~1"=="" (
-    set "QUANTLIB_SWIG=%WORKSPACE%\..\..\QuantLib-SWIG"
+    set "QUANTLIB_SWIG=%WORKSPACE%\..\QuantLib-SWIG"
 ) else (
     set "QUANTLIB_SWIG=%~1"
 )
