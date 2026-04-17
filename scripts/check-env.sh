@@ -298,6 +298,25 @@ main() {
         echo "  }"
         echo "}"
     else
+        # Detect package manager
+        local pkg_manager=""
+        local install_cmd=""
+        if command -v dnf &> /dev/null; then
+            pkg_manager="dnf"
+            install_cmd="sudo dnf install -y"
+        elif command -v apt-get &> /dev/null; then
+            pkg_manager="apt-get"
+            install_cmd="sudo apt-get update && sudo apt-get install -y"
+        fi
+
+        # Detect if QuantLib-SWIG exists
+        local swig_source_status=""
+        if [[ -d "$swig_dir" ]]; then
+            swig_source_status="${GREEN}✓ Found${NC}"
+        else
+            swig_source_status="${YELLOW}⚠ Not found${NC}"
+        fi
+
         echo ""
         echo -e "${BLUE}───────────────────────────────────────────────────────────────${NC}"
         echo ""
@@ -306,11 +325,31 @@ main() {
         echo ""
         echo -e "${GREEN}✓${NC} QuantLib: Required for native library compilation"
         echo ""
+        echo "Status:"
+        echo -e "  QuantLib-SWIG: $swig_source_status ($swig_dir)"
+        echo ""
         echo "Next steps:"
-        echo "  1. Install SWIG:         dnf install swig"
-        echo "  2. Install QuantLib:     dnf install quantlib-devel"
-        echo "  3. Clone QuantLib-SWIG:   git clone https://github.com/lballabio/QuantLib-SWIG.git"
-        echo "  4. Run build:            cd quantlib4j-parent/scripts && ./quick-build.sh"
+
+        if [[ -n "$pkg_manager" ]]; then
+            echo "  1. Install build tools:"
+            if [[ "$pkg_manager" == "dnf" ]]; then
+                echo "     $install_cmd gcc-c++ cmake swig boost-devel libicu-devel pcre2-devel"
+                echo "     # QuantLib (if not in repos, use build-native.sh to build from source)"
+            else
+                echo "     $install_cmd build-essential cmake swig libboost-all-dev libicu-dev libpcre2-dev"
+                echo "     # QuantLib: $install_cmd libquantlib-dev"
+            fi
+        fi
+
+        echo "  2. Clone QuantLib-SWIG:"
+        if [[ ! -d "$swig_dir" ]]; then
+            echo "     git clone https://github.com/lballabio/QuantLib-SWIG.git ../QuantLib-SWIG"
+        else
+            echo "     ✓ Already exists"
+        fi
+        echo ""
+        echo "  3. Build native library:"
+        echo "     ./scripts/build-native.sh"
         echo ""
     fi
 }
