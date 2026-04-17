@@ -15,7 +15,7 @@
 
 ```bash
 cd /path/to/workspace
-git clone https://github.com/lballabio/QuantLib-SWIG.git
+git clone git@github.com:luopc/QuantLib-SWIG.git
 ```
 
 ### 2. Linux/macOS 构建
@@ -76,7 +76,7 @@ docker-build.bat linux --swig-dir D:\path\to\QuantLib-SWIG
 - JDK 21
 - SWIG 4.2+
 - CMake, GCC
-- QuantLib 1.34（从源码编译）
+- QuantLib 1.42（从源码编译）
 
 ### quantlib4j-native-*/Dockerfile
 
@@ -102,7 +102,7 @@ export NEXUS_PASS=password
 <dependency>
     <groupId>com.luopc.platform.quantlib</groupId>
     <artifactId>quantlib4j</artifactId>
-    <version>1.3.5-SNAPSHOT</version>
+    <version>1.42.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -131,7 +131,7 @@ Start-Process Docker Desktop
 ```bash
 # 克隆到项目同级目录
 cd /path/to/workspace
-git clone https://github.com/lballabio/QuantLib-SWIG.git
+git clone git@github.com:luopc/QuantLib-SWIG.git
 
 # 或指定路径
 ./scripts/docker-build.sh linux --swig-dir /path/to/QuantLib-SWIG

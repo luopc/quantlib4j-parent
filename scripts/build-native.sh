@@ -12,10 +12,10 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE="$(cd "$SCRIPT_DIR/.." && pwd)"
-# Go to parent dir where tar.gz files are located
-cd "$WORKSPACE"
+# Go to parent dir where tar.gz files are located (e.g., /opt/public/apps/quanlib)
+cd "$WORKSPACE/.."
 JAVA_PACKAGE="com.luopc.platform.quantlib"
-PROJECT_VERSION="${PROJECT_VERSION:-1.3.5-SNAPSHOT}"
+PROJECT_VERSION="${PROJECT_VERSION:-1.42.0-SNAPSHOT}"
 QUANTLIB_VERSION="${QUANTLIB_VERSION:-1.42}"
 
 # Default values
@@ -194,7 +194,7 @@ if [ "$SKIP_SWIG" != "true" ]; then
         SWIG_DIR="$WORKSPACE/../QuantLib-SWIG"
     else
         echo "ERROR: QuantLib-SWIG not found at: $WORKSPACE/../QuantLib-SWIG"
-        echo "Please clone: git clone https://github.com/lballabio/QuantLib-SWIG.git ../QuantLib-SWIG"
+        echo "Please clone: git clone git@github.com:luopc/QuantLib-SWIG.git ../QuantLib-SWIG"
         exit 1
     fi
 

@@ -343,7 +343,7 @@ main() {
 
         echo "  2. Clone QuantLib-SWIG:"
         if [[ ! -d "$swig_dir" ]]; then
-            echo "     git clone https://github.com/lballabio/QuantLib-SWIG.git ../QuantLib-SWIG"
+            echo "     git clone git@github.com:luopc/QuantLib-SWIG.git ../QuantLib-SWIG"
         else
             echo "     ✓ Already exists"
         fi
