@@ -17,7 +17,6 @@
         <module>quantlib4j-loader</module>
         <module>quantlib4j-native-linux</module>
         <module>quantlib4j-native-windows</module>
-        <module>quantlib4j-native-macos</module>
         <module>quantlib4j-integration-test</module>
     </modules>
 
