@@ -206,13 +206,14 @@ if exist "%WORKSPACE_PARENT%\QuantLib-SWIG\SWIG\quantlib.i" (
 :use_swig_dir
 
 REM Create output directory
-if not exist "%WORKSPACE%\quantlib4j-java\src\main\java" mkdir "%WORKSPACE%\quantlib4j-java\src\main\java"
+set "JAVA_SRC_DIR=%WORKSPACE%\quantlib4j-java\src\main\java\com\luopc\platform\quantlib"
+if not exist "%JAVA_SRC_DIR%" mkdir "%JAVA_SRC_DIR%"
 
 REM Generate SWIG
 cd /d "%SWIG_DIR%\SWIG"
 "%SWIG_CMD%" -c++ -java ^
     -package "%JAVA_PACKAGE%" ^
-    -outdir "%WORKSPACE%\quantlib4j-java\src\main\java" ^
+    -outdir "%JAVA_SRC_DIR%" ^
     -o quantlib_wrap.cpp ^
     quantlib.i
 

@@ -19,7 +19,7 @@ if "%~1"=="" (
 )
 
 REM Output directories
-set "JAVA_SRC=%WORKSPACE%\quantlib4j-java\src\main\java"
+set "JAVA_SRC=%WORKSPACE%\quantlib4j-java\src\main\java\com\luopc\platform\quantlib"
 set "JAVA_TARGET=%WORKSPACE%\quantlib4j-java\target"
 
 echo ========================================
@@ -40,10 +40,12 @@ if not exist "%QUANTLIB_SWIG%\SWIG\quantlib.i" (
 
 REM 1. Clean
 echo [Step 1] Clean previous build
+if exist "%WORKSPACE%\quantlib4j-java\src\main\java\*.java" del /q "%WORKSPACE%\quantlib4j-java\src\main\java\*.java" 2>nul
+if exist "%WORKSPACE%\quantlib4j-java\src\main\java\*.h" del /q "%WORKSPACE%\quantlib4j-java\src\main\java\*.h" 2>nul
 if exist "%JAVA_SRC%\*.java" del /q "%JAVA_SRC%\*.java" 2>nul
 if exist "%JAVA_SRC%\*.h" del /q "%JAVA_SRC%\*.h" 2>nul
 if exist "%JAVA_TARGET%" rmdir /s /q "%JAVA_TARGET%" 2>nul
-mkdir "%JAVA_SRC%" 2>nul
+if not exist "%JAVA_SRC%" mkdir "%JAVA_SRC%" 2>nul
 mkdir "%JAVA_TARGET%" 2>nul
 echo OK: Cleaned
 echo.

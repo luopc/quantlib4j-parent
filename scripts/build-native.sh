@@ -235,12 +235,22 @@ if [ "$SKIP_BUILD" != "true" ]; then
     # Build native library
     echo "Compiling libquantlib4j.so..."
     mkdir -p quantlib4j-native-linux/src/main/resources
+
+    # Get SWIG output directory
+    if [ -d "$WORKSPACE/../QuantLib-SWIG" ]; then
+        SWIG_DIR="$WORKSPACE/../QuantLib-SWIG"
+    else
+        echo "ERROR: QuantLib-SWIG not found"
+        exit 1
+    fi
+
+    cd "$SWIG_DIR/SWIG"
     g++ -shared -fPIC \
         -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" \
         $(pkg-config --cflags quantlib) \
         quantlib_wrap.cpp \
         $(pkg-config --libs quantlib) \
-        -o quantlib4j-native-linux/src/main/resources/libquantlib4j.so
+        -o "$WORKSPACE/quantlib4j-native-linux/src/main/resources/libquantlib4j.so"
 
     # Build quantlib4j-native-linux (with distro profile)
     echo "Building quantlib4j-native-linux (profile: $DISTRO)..."
