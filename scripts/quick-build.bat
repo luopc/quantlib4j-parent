@@ -128,8 +128,8 @@ if exist "%QUANTLIB_HOME%\lib\QuantLib*.lib" (
 
 cd /d "%QUANTLIB_SWIG%\SWIG"
 
-REM Compile wrapper
-cl /c /EHsc /std:c++17 /MD /I"%JAVA_HOME%\include" /I"%JAVA_HOME%\include\win32" /I"%QL_INCLUDE%" quantlib_wrap.cpp /Fo:quantlib_wrap.obj
+REM Compile wrapper (use /MT to match QuantLib's static runtime library)
+cl /c /EHsc /std:c++17 /MT /I"%JAVA_HOME%\include" /I"%JAVA_HOME%\include\win32" /I"%QL_INCLUDE%" quantlib_wrap.cpp /Fo:quantlib_wrap.obj
 
 if errorlevel 1 (
     echo ERROR: Wrapper compilation failed
