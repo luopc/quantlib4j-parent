@@ -157,19 +157,23 @@ set "QL_FOUND="
 set "QL_INCLUDE="
 set "QL_LIB="
 
-REM Priority: vcpkg > workspace (only if workspace has built libs)
-REM vcpkg QuantLib has all dependencies (including boost)
+REM Priority: QUANTLIB_HOME > D:\dev-path\QuantLib-1.42 > vcpkg
 
-if exist "%VCPKG_ROOT%\installed\x64-windows-static\lib\QuantLib*.lib" (
-    set "QL_FOUND=1"
-    set "QL_INCLUDE=%VCPKG_ROOT%\installed\x64-windows-static\include"
-    set "QL_LIB=%VCPKG_ROOT%\installed\x64-windows-static\lib"
-    echo   OK: QuantLib found via vcpkg
-) else if exist "%QUANTLIB_HOME%\lib\QuantLib*.lib" (
+if exist "%QUANTLIB_HOME%\lib\QuantLib*.lib" (
     set "QL_FOUND=1"
     set "QL_INCLUDE=%QUANTLIB_HOME%\include"
     set "QL_LIB=%QUANTLIB_HOME%\lib"
     echo   OK: QuantLib found via QUANTLIB_HOME
+) else if exist "D:\dev-path\QuantLib-%QUANTLIB_VERSION%\lib\QuantLib*.lib" (
+    set "QL_FOUND=1"
+    set "QL_INCLUDE=D:\dev-path\QuantLib-%QUANTLIB_VERSION%\include"
+    set "QL_LIB=D:\dev-path\QuantLib-%QUANTLIB_VERSION%\lib"
+    echo   OK: QuantLib found at D:\dev-path\QuantLib-%QUANTLIB_VERSION%
+) else if exist "%VCPKG_ROOT%\installed\x64-windows-static\lib\QuantLib*.lib" (
+    set "QL_FOUND=1"
+    set "QL_INCLUDE=%VCPKG_ROOT%\installed\x64-windows-static\include"
+    set "QL_LIB=%VCPKG_ROOT%\installed\x64-windows-static\lib"
+    echo   OK: QuantLib found via vcpkg
 ) else if exist "D:\dev-path\vcpkg\installed\x64-windows-static\lib\QuantLib*.lib" (
     set "QL_FOUND=1"
     set "QL_INCLUDE=D:\dev-path\vcpkg\installed\x64-windows-static\include"
@@ -188,6 +192,8 @@ if exist "%WORKSPACE_PARENT%\QuantLib-SWIG\SWIG\quantlib.i" (
     set "SWIG_DIR=%WORKSPACE_PARENT%\QuantLib-SWIG"
 ) else if exist "%WORKSPACE%\..\QuantLib-SWIG\SWIG\quantlib.i" (
     set "SWIG_DIR=%WORKSPACE%\..\QuantLib-SWIG"
+) else if exist "D:\workspace\open_source\Risk-Manager\QuantLib-SWIG\SWIG\quantlib.i" (
+    set "SWIG_DIR=D:\workspace\open_source\Risk-Manager\QuantLib-SWIG"
 ) else (
     echo ERROR: QuantLib-SWIG not found
     echo Please clone: git clone git@github.com:luopc/QuantLib-SWIG.git ..
@@ -253,15 +259,24 @@ if not exist "%NATIVE_RESOURCES%" mkdir "%NATIVE_RESOURCES%"
 
 cd /d "%SWIG_DIR%\SWIG"
 
-REM Compile wrapper
-cl /c /EHsc /std:c++17 /MD /I"%JAVA_HOME%\include" /I"%JAVA_HOME%\include\win32" /I"%QL_INCLUDE%" quantlib_wrap.cpp /Fo:quantlib_wrap.obj
+REM Set boost include path (from vcpkg)
+set "BOOST_INCLUDE=%VCPKG_ROOT%\installed\x64-windows-static\include"
+if not exist "%BOOST_INCLUDE%\boost" set "BOOST_INCLUDE=D:\dev-path\vcpkg\installed\x64-windows-static\include"
+
+REM Compile wrapper (use /bigobj to handle large number of template sections)
+REM Use /MT to match QuantLib's static runtime library
+cl /c /EHsc /std:c++17 /MT /bigobj /I"%JAVA_HOME%\include" /I"%JAVA_HOME%\include\win32" /I"%QL_INCLUDE%" /I"%BOOST_INCLUDE%" quantlib_wrap.cpp /Fo:quantlib_wrap.obj
 if errorlevel 1 (
     echo ERROR: Wrapper compilation failed
     exit /b 1
 )
 
+REM Set boost lib path for linking
+set "BOOST_LIB=%VCPKG_ROOT%\installed\x64-windows-static\lib"
+if not exist "%BOOST_LIB%\boost" set "BOOST_LIB=D:\dev-path\vcpkg\installed\x64-windows-static\lib"
+
 REM Link
-link /DLL /OUT:"%NATIVE_RESOURCES%\quantlib4j.dll" /LIBPATH:"%QL_LIB%" quantlib_wrap.obj QuantLib-x64-mt-s.lib
+link /DLL /OUT:"%NATIVE_RESOURCES%\quantlib4j.dll" /LIBPATH:"%QL_LIB%" /LIBPATH:"%BOOST_LIB%" quantlib_wrap.obj QuantLib-x64-mt-s.lib
 if errorlevel 1 (
     echo ERROR: Linking failed
     exit /b 1
