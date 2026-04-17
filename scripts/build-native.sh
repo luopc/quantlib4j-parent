@@ -13,7 +13,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE="$(cd "$SCRIPT_DIR/.." && pwd)"
 # Go to parent dir where tar.gz files are located
-cd "$WORKSPACE/.."
+cd "$WORKSPACE"
 JAVA_PACKAGE="com.luopc.platform.quantlib"
 PROJECT_VERSION="${PROJECT_VERSION:-1.3.5-SNAPSHOT}"
 QUANTLIB_VERSION="${QUANTLIB_VERSION:-1.42}"
@@ -102,6 +102,7 @@ if [ "$SKIP_DEPS" != "true" ]; then
             cmake \
             boost-devel \
             libicu-devel \
+            pcre2-devel \
             wget \
             tar \
             gzip
@@ -113,6 +114,7 @@ if [ "$SKIP_DEPS" != "true" ]; then
             cmake \
             libboost-all-dev \
             libicu-dev \
+            libpcre2-dev \
             wget \
             tar \
             gzip
@@ -190,11 +192,9 @@ if [ "$SKIP_SWIG" != "true" ]; then
     # Check if QuantLib-SWIG exists
     if [ -d "$WORKSPACE/../QuantLib-SWIG" ]; then
         SWIG_DIR="$WORKSPACE/../QuantLib-SWIG"
-    elif [ -d "$WORKSPACE/QuantLib-SWIG" ]; then
-        SWIG_DIR="$WORKSPACE/QuantLib-SWIG"
     else
-        echo "ERROR: QuantLib-SWIG not found"
-        echo "Please clone: git clone https://github.com/ValHallas/QuantLib-SWIG.git ../QuantLib-SWIG"
+        echo "ERROR: QuantLib-SWIG not found at: $WORKSPACE/../QuantLib-SWIG"
+        echo "Please clone: git clone https://github.com/lballabio/QuantLib-SWIG.git ../QuantLib-SWIG"
         exit 1
     fi
 
@@ -221,6 +221,10 @@ if [ "$SKIP_BUILD" != "true" ]; then
     echo "[5/5] Building native library..."
 
     cd "$WORKSPACE"
+
+    # Install parent POM first
+    echo "Installing parent POM..."
+    mvn install -N -DskipTests
 
     # Build quantlib4j-java
     echo "Building quantlib4j-java..."

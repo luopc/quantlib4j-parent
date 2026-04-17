@@ -446,7 +446,7 @@ if defined QL_FOUND (
         )
     )
 ) else (
-    echo   [MISSING] [quantlib]  QuantLib 1.34+
+    echo   [MISSING] [quantlib]  QuantLib 1.42+
     echo.
     echo              Installation options:
     echo              1. vcpkg:     vcpkg install quantlib:x64-windows-static
@@ -476,5 +476,5 @@ if exist "D:\dev-path\vcpkg\installed\x64-windows-static\lib\QuantLib*.lib" (
     exit /b 0
 )
 
-echo     {"name":"quantlib","status":"error","version":"missing","description":"QuantLib 1.34+"},
+echo     {"name":"quantlib","status":"error","version":"missing","description":"QuantLib 1.42+"},
 exit /b 0

@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.luopc.platform.quantlib</groupId>
     <artifactId>quantlib4j-parent</artifactId>
-    <version>1.3.5-SNAPSHOT</version>
+    <version>1.42.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>QuantLib4J Parent</name>
@@ -14,10 +14,10 @@
 
     <modules>
         <module>quantlib4j-java</module>
+        <module>quantlib4j-loader</module>
         <module>quantlib4j-native-linux</module>
         <module>quantlib4j-native-windows</module>
         <module>quantlib4j-native-macos</module>
-        <module>quantlib4j-loader</module>
         <module>quantlib4j-integration-test</module>
     </modules>
 
@@ -25,11 +25,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <quantlib.version>1.34</quantlib.version>
+        <quantlib.version>1.42</quantlib.version>
         <nexus.url>https://lb.luopc.com/nexus/repository/maven-releases/</nexus.url>
         <nexus.public.url>https://lb.luopc.com//nexus/repository/maven-public/</nexus.public.url>
         <nexus.snapshots.url>https://lb.luopc.com/nexus/repository/maven-snapshots/</nexus.snapshots.url>
     </properties>
+
+    <scm>
+        <url>https://github.com/luopc/quantlib4j-parent/</url>
+        <connection>scm:git:git@github.com:luopc/quantlib4j-parent.git</connection>
+        <developerConnection>scm:git:git@github.com:luopc/quantlib4j-parent.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <distributionManagement>
         <repository>

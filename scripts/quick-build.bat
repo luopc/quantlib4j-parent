@@ -4,7 +4,7 @@ REM Usage: quick-build.bat [QuantLib-SWIG-path]
 
 setlocal enabledelayedexpansion
 
-set "VERSION=1.34"
+set "VERSION=1.42"
 set "PACKAGE=com.luopc.platform.quantlib"
 
 REM Get script directory

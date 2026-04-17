@@ -17,6 +17,21 @@
     <name>QuantLib4J (macOS x64 Native)</name>
     <description>QuantLib native library for macOS x64</description>
 
+    <profiles>
+        <!-- macOS x64 (default) -->
+        <profile>
+            <id>macos-x64</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <distro.classifier>macos-x64</distro.classifier>
+                <distro.name>macOS x64</distro.name>
+                <distro.version>14.0</distro.version>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -31,6 +46,8 @@
                         <manifestEntries>
                             <QuantLib-Version>${quantlib.version}</QuantLib-Version>
                             <Platform>macos-x64</Platform>
+                            <Distro>${distro.name}</Distro>
+                            <Distro-Version>${distro.version}</Distro-Version>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -51,7 +68,7 @@
                                 <artifact>
                                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                                     <type>jar</type>
-                                    <classifier>macos-x64</classifier>
+                                    <classifier>${distro.classifier}</classifier>
                                 </artifact>
                             </artifacts>
                         </configuration>

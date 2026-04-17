@@ -9,13 +9,13 @@
 set -e
 
 # 配置
-VERSION="1.34"
+VERSION="1.42"
 PACKAGE="com.luopc.platform.quantlib"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-WORKSPACE="$(dirname "$SCRIPT_DIR")"
+WORKSPACE="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # QuantLib-SWIG 路径
-QUANTLIB_SWIG="${1:-$WORKSPACE/../../QuantLib-SWIG}"
+QUANTLIB_SWIG="${1:-$WORKSPACE/../QuantLib-SWIG}"
 if [ ! -d "$QUANTLIB_SWIG" ]; then
     echo "❌ QuantLib-SWIG not found at: $QUANTLIB_SWIG"
     echo "   Please specify path: $0 /path/to/QuantLib-SWIG"

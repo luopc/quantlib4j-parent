@@ -22,7 +22,7 @@
         <profile>
             <id>ubuntu24</id>
             <properties>
-                <distro.classifier>ubuntu24</distro.classifier>
+                <distro.classifier>ubuntu24-x64</distro.classifier>
                 <distro.name>Ubuntu 24.04 LTS</distro.name>
                 <distro.version>24.04</distro.version>
             </properties>
@@ -31,7 +31,7 @@
         <profile>
             <id>alma9</id>
             <properties>
-                <distro.classifier>alma9</distro.classifier>
+                <distro.classifier>alma9-x64</distro.classifier>
                 <distro.name>AlmaLinux 9.7</distro.name>
                 <distro.version>9.7</distro.version>
             </properties>

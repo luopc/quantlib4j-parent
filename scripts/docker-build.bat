@@ -7,7 +7,7 @@ REM Configuration
 set "SCRIPT_DIR=%~dp0"
 set "WORKSPACE=%SCRIPT_DIR%.."
 set "PROJECT_VERSION=1.3.5-SNAPSHOT"
-set "QUANTLIB_VERSION=1.41"
+set "QUANTLIB_VERSION=1.42"
 set "JAVA_PACKAGE=com.luopc.platform.quantlib"
 
 REM Ensure absolute paths

@@ -23,7 +23,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE="$(cd "$SCRIPT_DIR/.." && pwd)"
 PROJECT_VERSION="${PROJECT_VERSION:-1.3.5-SNAPSHOT}"
-QUANTLIB_VERSION="${QUANTLIB_VERSION:-1.41}"
+QUANTLIB_VERSION="${QUANTLIB_VERSION:-1.42}"
 JAVA_PACKAGE="com.luopc.platform.quantlib"
 
 # Default values
@@ -144,7 +144,7 @@ docker build -f "$WORKSPACE/Dockerfile.build" \
 echo "  ✓ Build image ready: $BUILD_IMAGE"
 
 # Step 2: Generate SWIG Java code
-if [ "$SKIG_SWIG" = true ]; then
+if [ "$SKIP_SWIG" = true ]; then
     echo ""
     echo "[2/5] Skipping SWIG generation (--skip-swig)"
 else

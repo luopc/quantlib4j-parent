@@ -234,7 +234,7 @@ main() {
     fi
 
     # QuantLib
-    check_package "quantlib" "QuantLib 1.34+" true
+    check_package "quantlib" "QuantLib 1.42+" true
 
     # QuantLib thread-safe flag
     if pkg-config --exists quantlib 2>/dev/null; then
