@@ -157,6 +157,9 @@ set "QL_FOUND="
 set "QL_INCLUDE="
 set "QL_LIB="
 
+REM Priority: vcpkg > workspace (only if workspace has built libs)
+REM vcpkg QuantLib has all dependencies (including boost)
+
 if exist "%VCPKG_ROOT%\installed\x64-windows-static\lib\QuantLib*.lib" (
     set "QL_FOUND=1"
     set "QL_INCLUDE=%VCPKG_ROOT%\installed\x64-windows-static\include"
@@ -172,19 +175,6 @@ if exist "%VCPKG_ROOT%\installed\x64-windows-static\lib\QuantLib*.lib" (
     set "QL_INCLUDE=D:\dev-path\vcpkg\installed\x64-windows-static\include"
     set "QL_LIB=D:\dev-path\vcpkg\installed\x64-windows-static\lib"
     echo   OK: QuantLib found via D:\dev-path\vcpkg
-) else if exist "%WORKSPACE_PARENT%\QuantLib-1.42\lib\QuantLib*.lib" (
-    set "QL_FOUND=1"
-    set "QL_INCLUDE=%WORKSPACE_PARENT%\QuantLib-1.42\include"
-    set "QL_LIB=%WORKSPACE_PARENT%\QuantLib-1.42\lib"
-    echo   OK: QuantLib found in workspace
-)
-
-REM QuantLib include path is "ql" not "quantlib"
-if exist "%WORKSPACE_PARENT%\QuantLib-1.42\ql" (
-    set "QL_FOUND=1"
-    set "QL_INCLUDE=%WORKSPACE_PARENT%\QuantLib-1.42"
-    set "QL_LIB=%WORKSPACE_PARENT%\QuantLib-1.42\lib"
-    echo   OK: QuantLib found in workspace
 )
 
 REM Step 4: Generate SWIG Java bindings

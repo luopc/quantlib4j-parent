@@ -234,9 +234,9 @@ if [ "$SKIP_BUILD" != "true" ]; then
 
     # Build native library
     echo "Compiling libquantlib4j.so..."
-    mkdir -p quantlib4j-native-linux/src/main/resources
+    mkdir -p "$WORKSPACE/quantlib4j-native-linux/src/main/resources"
 
-    # Get SWIG output directory
+    # Get SWIG output directory and ensure pkg-config path
     if [ -d "$WORKSPACE/../QuantLib-SWIG" ]; then
         SWIG_DIR="$WORKSPACE/../QuantLib-SWIG"
     else
@@ -244,16 +244,30 @@ if [ "$SKIP_BUILD" != "true" ]; then
         exit 1
     fi
 
+    # Ensure pkg-config can find QuantLib
+    export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+    # Check if pkg-config works
+    if ! command -v pkg-config &> /dev/null; then
+        echo "WARNING: pkg-config not found, using fallback paths"
+        QL_CFLAGS="-I/usr/local/include"
+        QL_LIBS="-L/usr/local/lib -lQuantLib"
+    else
+        QL_CFLAGS=$(pkg-config --cflags quantlib 2>/dev/null || echo "-I/usr/local/include")
+        QL_LIBS=$(pkg-config --libs quantlib 2>/dev/null || echo "-L/usr/local/lib -lQuantLib")
+    fi
+
     cd "$SWIG_DIR/SWIG"
     g++ -shared -fPIC \
         -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" \
-        $(pkg-config --cflags quantlib) \
+        $QL_CFLAGS \
         quantlib_wrap.cpp \
-        $(pkg-config --libs quantlib) \
+        $QL_LIBS \
         -o "$WORKSPACE/quantlib4j-native-linux/src/main/resources/libquantlib4j.so"
 
     # Build quantlib4j-native-linux (with distro profile)
     echo "Building quantlib4j-native-linux (profile: $DISTRO)..."
+    cd "$WORKSPACE"
     mvn clean install -pl quantlib4j-native-linux -DskipTests -P$DISTRO
 
     # Build quantlib4j-loader
