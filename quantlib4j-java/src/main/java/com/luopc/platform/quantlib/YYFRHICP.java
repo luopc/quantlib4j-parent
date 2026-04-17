@@ -46,4 +46,12 @@ public class YYFRHICP extends YoYInflationIndex {
     this(QuantLibJNI.new_YYFRHICP__SWIG_1(), true);
   }
 
+  public YYFRHICP(boolean interpolated, YoYInflationTermStructureHandle h) {
+    this(QuantLibJNI.new_YYFRHICP__SWIG_2(interpolated, YoYInflationTermStructureHandle.getCPtr(h), h), true);
+  }
+
+  public YYFRHICP(boolean interpolated) {
+    this(QuantLibJNI.new_YYFRHICP__SWIG_3(interpolated), true);
+  }
+
 }

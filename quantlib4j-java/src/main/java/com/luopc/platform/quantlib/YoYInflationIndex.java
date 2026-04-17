@@ -46,12 +46,28 @@ public class YoYInflationIndex extends InflationIndex {
     this(QuantLibJNI.new_YoYInflationIndex__SWIG_1(ZeroInflationIndex.getCPtr(underlyingIndex), underlyingIndex), true);
   }
 
+  public YoYInflationIndex(ZeroInflationIndex underlyingIndex, boolean interpolated, YoYInflationTermStructureHandle ts) {
+    this(QuantLibJNI.new_YoYInflationIndex__SWIG_2(ZeroInflationIndex.getCPtr(underlyingIndex), underlyingIndex, interpolated, YoYInflationTermStructureHandle.getCPtr(ts), ts), true);
+  }
+
+  public YoYInflationIndex(ZeroInflationIndex underlyingIndex, boolean interpolated) {
+    this(QuantLibJNI.new_YoYInflationIndex__SWIG_3(ZeroInflationIndex.getCPtr(underlyingIndex), underlyingIndex, interpolated), true);
+  }
+
   public YoYInflationIndex(String familyName, Region region, boolean revised, Frequency frequency, Period availabilityLag, Currency currency, YoYInflationTermStructureHandle ts) {
-    this(QuantLibJNI.new_YoYInflationIndex__SWIG_2(familyName, Region.getCPtr(region), region, revised, frequency.swigValue(), Period.getCPtr(availabilityLag), availabilityLag, Currency.getCPtr(currency), currency, YoYInflationTermStructureHandle.getCPtr(ts), ts), true);
+    this(QuantLibJNI.new_YoYInflationIndex__SWIG_4(familyName, Region.getCPtr(region), region, revised, frequency.swigValue(), Period.getCPtr(availabilityLag), availabilityLag, Currency.getCPtr(currency), currency, YoYInflationTermStructureHandle.getCPtr(ts), ts), true);
   }
 
   public YoYInflationIndex(String familyName, Region region, boolean revised, Frequency frequency, Period availabilityLag, Currency currency) {
-    this(QuantLibJNI.new_YoYInflationIndex__SWIG_3(familyName, Region.getCPtr(region), region, revised, frequency.swigValue(), Period.getCPtr(availabilityLag), availabilityLag, Currency.getCPtr(currency), currency), true);
+    this(QuantLibJNI.new_YoYInflationIndex__SWIG_5(familyName, Region.getCPtr(region), region, revised, frequency.swigValue(), Period.getCPtr(availabilityLag), availabilityLag, Currency.getCPtr(currency), currency), true);
+  }
+
+  public YoYInflationIndex(String familyName, Region region, boolean revised, boolean interpolated, Frequency frequency, Period availabilityLag, Currency currency, YoYInflationTermStructureHandle ts) {
+    this(QuantLibJNI.new_YoYInflationIndex__SWIG_6(familyName, Region.getCPtr(region), region, revised, interpolated, frequency.swigValue(), Period.getCPtr(availabilityLag), availabilityLag, Currency.getCPtr(currency), currency, YoYInflationTermStructureHandle.getCPtr(ts), ts), true);
+  }
+
+  public YoYInflationIndex(String familyName, Region region, boolean revised, boolean interpolated, Frequency frequency, Period availabilityLag, Currency currency) {
+    this(QuantLibJNI.new_YoYInflationIndex__SWIG_7(familyName, Region.getCPtr(region), region, revised, interpolated, frequency.swigValue(), Period.getCPtr(availabilityLag), availabilityLag, Currency.getCPtr(currency), currency), true);
   }
 
   public Date lastFixingDate() {
