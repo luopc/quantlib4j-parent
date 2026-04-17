@@ -179,9 +179,12 @@ if exist "%VCPKG_ROOT%\installed\x64-windows-static\lib\QuantLib*.lib" (
     echo   OK: QuantLib found in workspace
 )
 
-if not defined QL_FOUND (
-    echo   WARN: QuantLib not found - skipping native build
-    set "SKIP_BUILD=true"
+REM QuantLib include path is "ql" not "quantlib"
+if exist "%WORKSPACE_PARENT%\QuantLib-1.42\ql" (
+    set "QL_FOUND=1"
+    set "QL_INCLUDE=%WORKSPACE_PARENT%\QuantLib-1.42"
+    set "QL_LIB=%WORKSPACE_PARENT%\QuantLib-1.42\lib"
+    echo   OK: QuantLib found in workspace
 )
 
 REM Step 4: Generate SWIG Java bindings
