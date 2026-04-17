@@ -268,7 +268,7 @@ if [ "$SKIP_BUILD" != "true" ]; then
     # Build quantlib4j-native-linux (with distro profile)
     echo "Building quantlib4j-native-linux (profile: $DISTRO)..."
     cd "$WORKSPACE"
-    mvn clean install -pl quantlib4j-native-linux -DskipTests -P$DISTRO
+    mvn clean install -pl quantlib4j-native-linux -am -DskipTests -P$DISTRO
 
     # Build quantlib4j-loader
     echo "Building quantlib4j-loader..."
