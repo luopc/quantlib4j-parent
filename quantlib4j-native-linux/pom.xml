@@ -48,7 +48,7 @@
                 <distro.classifier>linux-x64</distro.classifier>
                 <distro.name>Linux x64</distro.name>
                 <distro.version>unknown</distro.version>
-                <so.path>.</so.path>
+                <so.path>linux-x64</so.path>
             </properties>
         </profile>
     </profiles>

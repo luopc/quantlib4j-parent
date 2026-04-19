@@ -139,7 +139,7 @@ public class QuantLibLoader {
     private static boolean tryLoadFromClasspath() {
         String platform = NativeLibraryResolver.getPlatformClassifier();
         String libraryFileName = NativeLibraryResolver.getNativeLibraryFileName();
-        String resourcePath = "/native/" + platform + "/" + libraryFileName;
+        String resourcePath = "/" + libraryFileName;
 
         log.debug("Looking for native library in classpath: {}", resourcePath);
 

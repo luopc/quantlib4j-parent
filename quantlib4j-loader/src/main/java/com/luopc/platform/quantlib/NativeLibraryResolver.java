@@ -13,7 +13,7 @@ public class NativeLibraryResolver {
     public static final String PLATFORM_MACOS_ARM64 = "macos-arm64";
 
     // JNI库名称前缀
-    private static final String JNI_LIB_NAME = "QuantLib4J";
+    private static final String JNI_LIB_NAME = "quantlib4j";
 
     private NativeLibraryResolver() {
         // 工具类不允许实例化
