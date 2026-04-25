@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.luopc.platform.quantlib</groupId>
     <artifactId>quantlib4j-parent</artifactId>
-    <version>1.42.0-SNAPSHOT</version>
+    <version>1.42.0</version>
     <packaging>pom</packaging>
 
     <name>QuantLib4J Parent</name>
@@ -34,7 +31,7 @@
         <url>https://github.com/luopc/quantlib4j-parent/</url>
         <connection>scm:git:git@github.com:luopc/quantlib4j-parent.git</connection>
         <developerConnection>scm:git:git@github.com:luopc/quantlib4j-parent.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>quantlib4j-parent-1.42.0</tag>
     </scm>
 
     <distributionManagement>
